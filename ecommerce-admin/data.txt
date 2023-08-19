@@ -1,4 +1,16 @@
 mongo:
 
-username= sayakbasakhack
+username= sayakbasakhack email:sayakbasakhack@gmail.com
 password= 123
+
+
+aws 
+email: sayakbasak842@gmail.com
+Sayak Basak
+password:Fuckpubg@69
+bucketname: sayak-next-ecommerce
+MFA device name: Sayak@123
+
+new user added: sayak-next-ecommerce
+mfa: 352028
+policy name: policy-s3-sayak-next-ecommerce
