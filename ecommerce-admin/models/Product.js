@@ -2,14 +2,15 @@ import { Schema, model, models } from "mongoose";
 
 const ProductSchema =new Schema({
     title:{
-        type:"string",
+        type:String,
         required: true
     },
-    description: 'string',
+    description: String,
     price: {
-        type:'Number',
+        type:Number,
         required: true
-    }
+    },
+    images: [{type: String}]
 });
 
 const Product =models.Product || model('Product',ProductSchema);
