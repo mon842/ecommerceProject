@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import Spinner from './Spinner';
-
+import { ReactSortable } from 'react-sortablejs';
 
 const ProductForm = ({
   _id,
@@ -31,10 +31,10 @@ const ProductForm = ({
     e.preventDefault();
 
     if (_id) {
-      const res=await axios.put('/api/products', { ...data, _id });
+      const res = await axios.put('/api/products', { ...data, _id });
 
     } else {
-      const res=await axios.post('/api/products', data);
+      const res = await axios.post('/api/products', data);
 
     }
 
@@ -69,6 +69,10 @@ const ProductForm = ({
     }
   }
 
+  const updateImagesOrder = (images) => {
+    setImages(images)
+  }
+
   return (
     <form onSubmit={saveProduct}>
 
@@ -82,17 +86,23 @@ const ProductForm = ({
 
       <label htmlFor="">photos</label>
       <div className='mb-2 flex flex-wrap gap-2'>
-        {!!images?.length && (
-          images.map((link) => (
-            <div key={link} className='h-20'>
-              <img className='h-20 rounded' src={link} alt="" />
-            </div>
 
-          ))
-        )}
-        {isuploading && 
+        <ReactSortable className='flex flex-wrap gap-1' list={images} setList={updateImagesOrder}>
+          {!!images?.length && (
+            images.map((link) => (
+              <div key={link} className='h-20'>
+                <img className='h-20 rounded' src={link} alt="" />
+              </div>
+
+            ))
+          )}
+        </ReactSortable>
+
+
+
+        {isuploading &&
           (<div>
-            <Spinner/>
+            <Spinner />
           </div>)
         }
         <label className='w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-sm bg-white shadow-sm border border-primary'>
