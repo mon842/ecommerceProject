@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 export default async function handle(req,res) {
   const {method} =req;
-  mongooseConnect();
+  await mongooseConnect();
   // console.log(req.body);
   if (method==='POST'){
     const {title,description,price,images}=req.body;
