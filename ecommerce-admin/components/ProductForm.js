@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import Spinner from './Spinner';
@@ -7,6 +7,7 @@ import { ReactSortable } from 'react-sortablejs';
 const ProductForm = ({
   _id,
   title: existingTitle,
+  category: existingCategory,
   description: existingDescription,
   price: existingPrice,
   images: existingImages,
@@ -16,29 +17,30 @@ const ProductForm = ({
   const [description, setDescription] = useState(existingDescription || '');
   const [price, setPrice] = useState(existingPrice || '');
   const [images, setImages] = useState(existingImages || []);
+  const [categories, setCategories] = useState( [] );
+  const [category, setCategory] = useState( existingCategory || '' );
   const [goToProducts, setGoToProducts] = useState(false);
   const [isuploading, setIsuploading] = useState(false);
 
   const router = useRouter();
 
-  const data = {
-    title,
-    description,
-    price,
-    images
-  }
+  
   async function saveProduct(e) {
     e.preventDefault();
-
+    const data = {
+      title,
+      category,
+      description,
+      price,
+      images
+    }
     if (_id) {
       const res = await axios.put('/api/products', { ...data, _id });
 
     } else {
       const res = await axios.post('/api/products', data);
-
+      console.log(res);
     }
-
-
     setGoToProducts(true);
   }
   if (goToProducts) {
@@ -73,6 +75,13 @@ const ProductForm = ({
     setImages(images)
   }
 
+  useEffect(() => {
+    axios.get('/api/categories').then((response) => {
+      setCategories(response.data);
+    });
+  }, [])
+  
+
   return (
     <form onSubmit={saveProduct}>
 
@@ -83,6 +92,15 @@ const ProductForm = ({
         value={title}
         onChange={event => setTitle(event.target.value)}
       />
+
+      <label >category</label>
+      <select value={category} 
+      onChange={(e)=>{setCategory(e.target.value)}}>
+      <option value="">uncategorized</option>
+        {categories.length>0 && categories.map((category) =>(
+          <option key={category._id} value={category._id}>{category.name}</option>
+        ))}
+      </select>
 
       <label htmlFor="">photos</label>
       <div className='mb-2 flex flex-wrap gap-2'>

@@ -5,12 +5,12 @@ import mongoose from "mongoose";
 export default async function handle(req,res) {
   const {method} =req;
   await mongooseConnect();
-  // console.log(req.body);
+
   if (method==='POST'){
-    const {title,description,price,images}=req.body;
-    
+    const {title,category,description,price,images}=req.body;
+
     const productDoc=await Product.create({
-        title,description,price,images
+        title,category,description,price,images
     })
     res.json(productDoc);
   }
@@ -24,8 +24,8 @@ export default async function handle(req,res) {
   }
 
   if (method==='PUT'){
-    const {title,description,price,_id,images}=req.body;
-    await Product.updateOne({_id},{title,description,price,images});
+    const {title,category,description,price,_id,images}=req.body;
+    await Product.updateOne({_id},{title,category,description,price,images});
     res.json(true);
   }
   

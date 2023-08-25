@@ -8,23 +8,18 @@ export default async function handle(req, res) {
   if (method === 'POST') {
     const { name,parentCategory } = req.body;
 
-    const categoryDoc = await Category.create({ name, parent:parentCategory })
+    const categoryDoc = await Category.create({ name, parent:parentCategory || undefined })
     res.json(categoryDoc);
   }
 
   if (method === 'GET') {
     res.json(await Category.find().populate('parent'));
-    // if (req.query?.id) {
-    //   res.json(await Category.findOne({ _id: req.query.id }));
-    // }
-    // else
-    //   res.json(await Category.find());
   }
 
   if (method === 'PUT') {
     const { _id,name,parentCategory } = req.body;
 
-    const categoryDoc = await Category.updateOne({_id},{ name, parent:parentCategory })
+    const categoryDoc = await Category.updateOne({_id},{ name, parent:parentCategory || undefined })
     res.json(categoryDoc);
   }
 
