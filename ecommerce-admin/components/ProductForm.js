@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import Spinner from './Spinner';
@@ -11,20 +11,39 @@ const ProductForm = ({
   description: existingDescription,
   price: existingPrice,
   images: existingImages,
+  properties: assignedProperties,
 }) => {
 
   const [title, setTitle] = useState(existingTitle || '');
   const [description, setDescription] = useState(existingDescription || '');
   const [price, setPrice] = useState(existingPrice || '');
   const [images, setImages] = useState(existingImages || []);
-  const [categories, setCategories] = useState( [] );
-  const [category, setCategory] = useState( existingCategory || '' );
+  const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState(existingCategory || '');
+  const [productProperties, setProductProperties] = useState(assignedProperties || {});
   const [goToProducts, setGoToProducts] = useState(false);
   const [isuploading, setIsuploading] = useState(false);
 
   const router = useRouter();
 
-  
+
+  //functions
+
+  const propertiesToFill = [];
+  if (categories.length > 0 && category) {
+    let catInfo = categories.find(({ _id }) => _id === category);
+
+    propertiesToFill.push(...catInfo.properties);
+
+    while (catInfo?.parent?._id) {
+      const parentCat = categories.find(({ _id }) => _id === catInfo?.parent?._id);
+      propertiesToFill.push(...parentCat.properties);
+      catInfo = parentCat;
+    }
+
+  }
+
+
   async function saveProduct(e) {
     e.preventDefault();
     const data = {
@@ -32,19 +51,30 @@ const ProductForm = ({
       category,
       description,
       price,
-      images
+      images,
+      properties: productProperties
     }
+    // console.log(data);
     if (_id) {
       const res = await axios.put('/api/products', { ...data, _id });
 
     } else {
       const res = await axios.post('/api/products', data);
-      console.log(res);
+      // console.log(res);
     }
     setGoToProducts(true);
   }
   if (goToProducts) {
     router.push('/products');
+  }
+
+  function setProductProp(propName, value) {
+    // console.log(productProperties);
+    setProductProperties(prev => {
+      const newProductProps = { ...prev };
+      newProductProps[propName] = value;
+      return newProductProps;
+    });
   }
 
   async function uploadImages(e) {
@@ -80,7 +110,7 @@ const ProductForm = ({
       setCategories(response.data);
     });
   }, [])
-  
+
 
   return (
     <form onSubmit={saveProduct}>
@@ -94,13 +124,56 @@ const ProductForm = ({
       />
 
       <label >category</label>
-      <select value={category} 
-      onChange={(e)=>{setCategory(e.target.value)}}>
-      <option value="">uncategorized</option>
-        {categories.length>0 && categories.map((category) =>(
+      <select value={category}
+        onChange={(e) => { setCategory(e.target.value) }}>
+        <option value="">uncategorized</option>
+        {categories.length > 0 && categories.map((category) => (
           <option key={category._id} value={category._id}>{category.name}</option>
         ))}
       </select>
+
+
+      {propertiesToFill.length > 0 && propertiesToFill.map(p => (
+        <div key={p.pname} className="">
+          <label>{p.pname[0].toUpperCase() + p.pname.substring(1)}</label>
+          <div>
+            <select value={productProperties[p.pname]}
+                      onChange={ev =>
+                        setProductProp(p.pname,ev.target.value)
+                      }
+              >
+                {p.values.map(v => (
+                  <option key={v} value={v}>{v}</option>
+                ))}
+              </select>
+
+            {/* {p.values.length > 1 &&
+              <select value={productProperties[p.pname]}
+                onChange={ev =>
+                  setProductProp(p.pname, ev.target.value)
+                }
+              >
+                {p.values.map(v => (
+                  <option key={v} value={v}>{v}</option>
+                ))}
+              </select>
+            }
+
+            {p.values.length=== 1 &&
+              <select value={productProperties[p.pname]}
+                onClick={()=>{setProductProp(p.pname, p.values)}
+                }
+              >
+                {p.values.map(v => (
+                  <option key={v} value={v}>{v}</option>
+                ))}
+              </select>
+            } */}
+
+
+          </div>
+        </div>
+      ))}
 
       <label htmlFor="">photos</label>
       <div className='mb-2 flex flex-wrap gap-2'>

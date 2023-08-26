@@ -16,11 +16,6 @@ const Categories = ({ swal }) => {
 
   // functions
 
-  const editCategory = (category) => {
-    setEditedCategory(category);
-    setName(category.name);
-    setParentCategory(category?.parent?._id);
-  }
 
   useEffect(() => {
     fetchCategories();
@@ -34,8 +29,15 @@ const Categories = ({ swal }) => {
 
   const saveCategory = async (ev) => {
     ev.preventDefault();
-    const data = { name, parentCategory };
-    // console.log(data);
+    const data = {
+      name,
+      parentCategory,
+      properties:properties.map(p => ({
+        pname:p.pname,
+        values:p.values.split(','),
+      })),
+    };
+
     if (editedCategory) {
       const res = await axios.put('/api/categories', { ...data, _id: editedCategory._id });
       setEditedCategory(null);
@@ -44,9 +46,22 @@ const Categories = ({ swal }) => {
     }
 
     setName('');
-    setParentCategory('')
+    setParentCategory('');
+    setProperties([]);
     fetchCategories();
   };
+
+  const editCategory = (category) => {
+    setEditedCategory(category);
+    setName(category.name);
+    setParentCategory(category?.parent?._id);
+    setProperties(
+      category.properties.map(({pname,values}) => ({
+      pname,
+      values:values.join(',')
+    }))
+    );
+  }
 
   const deleteCategory = async (category) => {
     swal.fire({
@@ -210,8 +225,6 @@ const Categories = ({ swal }) => {
     </Layout>
   )
 }
-
-// export default categories
 
 
 export default withSwal(({ swal }, ref) => (
