@@ -23,8 +23,3 @@ export default function Layout({children}) {
   </>
 }
 
-
-{/* <h1 className=" ml-10">Signed in as {session.user.email}</h1> */}
-
-{/* <br/> */}
-      // <button className="bg-orange-400 text-white p-1 h-10 " onClick={() => signOut()}>Sign out</button>
