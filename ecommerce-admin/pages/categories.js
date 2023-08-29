@@ -212,8 +212,8 @@ const Categories = ({ swal }) => {
               <td>{category.name}</td>
               <td>{category?.parent?.name}</td>
               <td>
-                <button onClick={() => { editCategory(category) }} className='btn-primary'>edit</button>
-                <button onClick={() => { deleteCategory(category) }} className='btn-primary ml-1'>delete</button>
+                <button onClick={() => { editCategory(category) }} className='btn-default'>edit</button>
+                <button onClick={() => { deleteCategory(category) }} className='btn-red ml-1'>delete</button>
               </td>
             </tr>
           ))}
