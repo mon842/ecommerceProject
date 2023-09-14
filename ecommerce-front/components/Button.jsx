@@ -7,6 +7,8 @@ export const ButtonStyle =css`
     cursor:pointer;
     align-items:center;
     text-decoration: none;
+    border-radius:5px;
+    font-weight:bold;
     svg{
         height: 16px;
         margin-right: 5px;
@@ -22,10 +24,16 @@ export const ButtonStyle =css`
         color: #fff;
         border: 1px solid #fff;
     `}
-    ${props => props.primary && css`
+    ${props => props.primary && !props.outline && css`
         background-color:#5542F6;
         color:#fff;
 
+    ` }
+
+    ${props => props.primary && props.outline && css`
+        background-color:transparent;
+        color:#5542F6;
+        border: 1px solid #5542F6;
     ` }
 
     ${props => props.size === 'l' && css`
