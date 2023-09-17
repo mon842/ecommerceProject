@@ -53,10 +53,14 @@ export function CartContextProvider({ children }) {
   function removePerticularProduct(productId) {
     setCartProducts(cartProducts.filter(p => p !== productId));
   }
+  function clearCartProducts() {
+    console.log("clearCartProducts");
+    setCartProducts([]);
+  }
 
   function removeProduct(productId) {
     setCartProducts(prev => {
-      const pos = prev.indexOf(productId);
+      const pos = prev.indexOf(productId );
       if (pos !== -1) {
         return prev.filter((value,index) => index !== pos);
       }
@@ -66,7 +70,7 @@ export function CartContextProvider({ children }) {
 
 
   return (
-    <CartContext.Provider value={{ cartProducts, setCartProducts, addProduct, removeProduct }}>
+    <CartContext.Provider value={{ cartProducts, setCartProducts, addProduct, removeProduct ,clearCartProducts, setCartProducts}}>
       {children}
     </CartContext.Provider>
   );

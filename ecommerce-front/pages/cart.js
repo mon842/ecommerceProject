@@ -66,7 +66,7 @@ const CityHolder = styled.div`
 `;
 
 const CartPage = () => {
-    const { cartProducts, addProduct, removeProduct } = useContext(CartContext);
+    const { cartProducts, addProduct, removeProduct ,clearCartProducts,setCartProducts } = useContext(CartContext);
     const [products, setProducts] = useState([]);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -74,7 +74,7 @@ const CartPage = () => {
     const [postalCode, setPostalCode] = useState('');
     const [streetAddress, setStreetAddress] = useState('');
     const [country, setCountry] = useState('');
-
+    const [isSuccess, setIsSuccess] = useState(false);
 
     useEffect(() => {
         if (cartProducts?.length > 0) {
@@ -88,6 +88,18 @@ const CartPage = () => {
 
     }, [cartProducts])
 
+    useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+        if (window?.location.href.includes('success')) {
+            // setCartProducts([]);
+            clearCartProducts();
+            clearCartProducts();
+            setIsSuccess(true);
+            
+        }
+    }, []);
 
     let total = 0;
     for (const productId of cartProducts) {
@@ -103,7 +115,21 @@ const CartPage = () => {
             window.location = response.data.url;
         }
     }
-
+    if (isSuccess) {
+        return (
+            <>
+                <Header />
+                <Center>
+                    <ColumnsWrapper>
+                        <Box>
+                            <h1>Thanks for your order!</h1>
+                            <p>We will email you when your order will be sent.</p>
+                        </Box>
+                    </ColumnsWrapper>
+                </Center>
+            </>
+        );
+    }
     return (
         <>
             <Header />
