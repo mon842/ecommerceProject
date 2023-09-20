@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "micro": "^10.0.1",
     "axios": "^1.3.4",
     "autoprefixer": "10.4.15",
     "eslint": "8.49.0",

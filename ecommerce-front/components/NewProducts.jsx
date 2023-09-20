@@ -9,11 +9,15 @@ const Title = styled.h2`
   font-weight: normal;
 `;
 
-const ProductGrid=styled.div`
+const ProductGrid = styled.div`
     display: grid;
-    grid-template-columns:1fr 1fr 1fr 1fr;
     gap: 40px;
     margin-top:20px;
+    grid-template-columns: 1fr 1fr;
+
+    @media screen and (min-width: 768px) {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
 `
 
 const NewProducts = ({ products }) => {
@@ -23,11 +27,11 @@ const NewProducts = ({ products }) => {
             <Title>New Arrivals</Title>
             <ProductGrid>
                 {
-                    products?.length>0 && products.map(product =>(
+                    products?.length > 0 && products.map(product => (
                         <div key={product._id}>
-                            <ProductBox {...product}/>
+                            <ProductBox {...product} />
                         </div>
-                        
+
                     ))
                 }
             </ProductGrid>

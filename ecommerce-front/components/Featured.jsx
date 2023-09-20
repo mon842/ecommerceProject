@@ -17,8 +17,10 @@ const Title = styled.h1`
   margin:0;
   font-weight:normal;
   font-size:1.5rem;
-
+  @media screen and (min-width: 768px) {
+    font-size:3rem;
   }
+  
 `;
 const Desc = styled.p`
   color:#aaa;
@@ -27,15 +29,32 @@ const Desc = styled.p`
 
 const ColumnsWrapper = styled.div`
 display: grid;
-grid-template-columns: 0.8fr 1.2fr;
-img{
-    max-width:100%;
-}
+  grid-template-columns: 1fr;
+  gap: 40px;
+  img{
+    max-width: 100%;
+    max-height: 200px;
+    display: block;
+    margin: 0 auto;
+  }
+  div:nth-child(1) {
+    order: 2;
+  }
+  @media screen and (min-width: 768px) {
+    grid-template-columns: 1.1fr 0.9fr;
+    div:nth-child(1) {
+      order: 0;
+    }
+    img{
+      max-width: 100%;
+    }
+  }
 `
 
 const Column = styled.div`
   display: flex;
   align-items: center;
+
 `;
 
 const ButtonsWrapper = styled.div`
@@ -43,6 +62,8 @@ const ButtonsWrapper = styled.div`
   gap:10px;
   margin-top:25px;
 `;
+
+
 
 const Featured = ({product}) => {
     const img=product.images[0];
@@ -76,7 +97,7 @@ const Featured = ({product}) => {
 
 
                     <Column>
-                        <img src={img} alt="" />
+                        <img src={img} alt="" style={{marginBottom:'6px'}} />
                     </Column>
 
                 </ColumnsWrapper>
