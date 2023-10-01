@@ -2,7 +2,7 @@ import Layout from '@/components/Layout'
 import {useEffect, useState} from "react";
 import axios from "axios";
 
-const orders = () => {
+const Orders = () => {
     const [orders,setOrders] = useState([]);
     
     useEffect(() => {
@@ -52,4 +52,4 @@ const orders = () => {
     )
 }
 
-export default orders
+export default Orders
