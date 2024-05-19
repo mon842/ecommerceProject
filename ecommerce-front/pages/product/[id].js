@@ -2,6 +2,7 @@ import Button from '@/components/Button';
 import { CartContext } from '@/components/CartContext';
 import Center from '@/components/Center';
 import Header from '@/components/Header';
+import Layout from '@/components/Layout';
 import ProductImages from '@/components/ProductImages';
 import Tag from '@/components/Tag';
 import Title from '@/components/Title';
@@ -35,7 +36,7 @@ const ProductPage = ({ product }) => {
     const { addProduct } = useContext(CartContext);
     console.log(product.properties);
     return (
-        <>
+        <Layout>
             <Header />
             <Center>
                 <ColWrapper>
@@ -67,7 +68,7 @@ const ProductPage = ({ product }) => {
                 </ColWrapper>
 
             </Center>
-        </>
+        </Layout>
     )
 }
 

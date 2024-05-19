@@ -3,8 +3,10 @@ import { CartContext } from '@/components/CartContext'
 import Center from '@/components/Center';
 import Header from '@/components/Header'
 import Input from '@/components/Input';
+import Layout from '@/components/Layout';
 import Table from '@/components/Table';
 import axios from 'axios';
+import { useSession } from 'next-auth/react';
 import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components';
 
@@ -66,7 +68,8 @@ const CityHolder = styled.div`
 `;
 
 const CartPage = () => {
-    const { cartProducts, addProduct, removeProduct ,clearCartProducts,setCartProducts } = useContext(CartContext);
+    const { cartProducts, addProduct, removeProduct, clearCartProducts, setCartProducts } = useContext(CartContext);
+    const { data: session } = useSession();
     const [products, setProducts] = useState([]);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -75,6 +78,30 @@ const CartPage = () => {
     const [streetAddress, setStreetAddress] = useState('');
     const [country, setCountry] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
+
+    useEffect(() => {
+
+        const ip = async () => {
+            try {
+                const res = await fetch('https://api.ipify.org');
+                // setIpaddress(res);
+                const ipadd = await res.text();
+                const loc = await fetch(`http://ip-api.com/json/${ipadd}`);
+                const data = await loc.json();
+                console.log(data);
+                setCountry(data?.country);
+                setCity(data?.city);
+                setPostalCode(data?.zip);
+                setStreetAddress(data?.regionName);
+            } catch (error) {
+            }
+        }
+        ip();
+        setName(session?.user?.name);
+        setEmail(session?.user?.email);
+
+    }, [])
+
 
     useEffect(() => {
         if (cartProducts?.length > 0) {
@@ -117,7 +144,7 @@ const CartPage = () => {
     }
     if (isSuccess) {
         return (
-            <>
+            <Layout>
                 <Header />
                 <Center>
                     <ColumnsWrapper>
@@ -127,11 +154,11 @@ const CartPage = () => {
                         </Box>
                     </ColumnsWrapper>
                 </Center>
-            </>
+            </Layout>
         );
     }
     return (
-        <>
+        <Layout>
             <Header />
             <Center>
                 <ColumnsWrapper>
@@ -197,7 +224,7 @@ const CartPage = () => {
                                 <Input type="text" name="postalCode" onChange={(e) => setPostalCode(e.target.value)} value={postalCode} placeholder="Postal Code" />
                             </CityHolder>
 
-                            <Input type="text" name="streetAddress" onChange={(e) => setStreetAddress(e.target.value)} value={streetAddress} placeholder="Street Address" />
+                            <Input type="text" name="streetAddress" onChange={(e) => setStreetAddress(e.target.value)} value={streetAddress} placeholder="Address" />
                             <Input type="text" name="country" onChange={(e) => setCountry(e.target.value)} value={country} placeholder="Country" />
 
                             <input type="hidden" name='products' value={cartProducts.join(',')} />
@@ -212,7 +239,7 @@ const CartPage = () => {
             </Center>
 
 
-        </>
+        </Layout>
     )
 }
 

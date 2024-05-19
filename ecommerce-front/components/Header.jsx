@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import Center from './Center';
 import { CartContext } from './CartContext';
 import BarsIcon from './icons/BarsIcon';
+import { signOut} from 'next-auth/react';
 
 
 const StyledHeader = styled.header`
@@ -69,10 +70,22 @@ const NavButton = styled.button`
     display: none;
   }
 `
+const StyledButton = styled.button`
+    background-color: #222;
+    color: #aaa;
+    border: none;
+    display: block;
+    cursor: pointer;
+    font-size: 17px;
+`;
 
 const Header = () => {
   const { cartProducts } = useContext(CartContext);
-  const [mobileNavActive,setMobileNavActive] = useState(false);
+  const [mobileNavActive, setMobileNavActive] = useState(false);
+  async function logout() {
+    // await router.push('/');
+    await signOut();
+  }
   return (
     <StyledHeader>
       <Center>
@@ -81,9 +94,12 @@ const Header = () => {
           <StyledNav mobileNavActive={mobileNavActive} >
             <NavLink href={'/'} >Home</NavLink>
             <NavLink href={'/products'}>All Products</NavLink>
-            <NavLink href={'/categories'}>Categories</NavLink>
-            <NavLink href={'/account'}>Accounts</NavLink>
+            {/* <NavLink href={'/categories'}>Categories</NavLink> */}
+            {/* <NavLink href={'/account'}>Accounts</NavLink> */}
             <NavLink href={'/cart'}>Cart ( {cartProducts?.length} )</NavLink>
+            <StyledButton onClick={logout}>
+              Logout
+            </StyledButton>
           </StyledNav>
           <NavButton onClick={() => setMobileNavActive(prev => !prev)} >
             <BarsIcon />
